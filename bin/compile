@@ -7,6 +7,7 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 require "language_pack/shell_helpers"
 
+sleep 2
 test_connection = `ssh -T git@github.com 2>&1`
 unless test_connection.include? "successfully authenticated"
   puts "!!! ssh key error"
