@@ -9,8 +9,8 @@ require "language_pack/shell_helpers"
 
 test_connection = `ssh -T git@github.com 2>&1`
 unless test_connection.include? "successfully authenticated"
-  alert "ssh key error"
-  alert test_connection
+  puts "!!! ssh key error"
+  puts "!!! #{test_connection}"
   exit 1
 end
 
