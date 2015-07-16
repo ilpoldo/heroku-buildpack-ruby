@@ -7,13 +7,29 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 require "language_pack/shell_helpers"
 
-sleep 2
+# ssh debug
+env_dir      = ARGV[2]
+ssh_dir      = File.expand_path "#{ENV['HOME']}/.ssh"
+
+host_hash_path = File.join env_dir, 'GITHUB_HOST_HASH'
+host_hash = File.open(host_hash_path, &:read) if File.exist? host_hash_path
+
+content = IO.read("#{ssh_dir}/known_hosts")
+known_hosts = content.scan(Regexp.escape('\*?{}.'))
+unless (occurrences = known_hosts.count()) == 1
+  puts "!!! found #{occurrences} expected known hosts instead of one"
+  puts "!!! #{host_hash}"
+end
+
+
 test_connection = `ssh -T git@github.com 2>&1`
 unless test_connection.include? "successfully authenticated"
   puts "!!! ssh key error"
   puts "!!! #{test_connection}"
   exit 1
 end
+
+# / ssh debug
 
 begin
   LanguagePack::Instrument.trace 'compile', 'app.compile' do
