@@ -8,7 +8,6 @@ require "language_pack"
 require "language_pack/shell_helpers"
 
 require "ssh_setup"
-ssh_setup()
 
 begin
   LanguagePack::Instrument.trace 'compile', 'app.compile' do
